@@ -1,0 +1,174 @@
+<html lang="en"><head>
+
+    <title>Jquery - Multer</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  
+  <style>
+  body {
+    background: rgb(245, 245, 245);
+    font-family: 'Open Sans', sans-serif;
+  }
+  .container {
+    max-width: 960px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  h1 {
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0 20px;
+  }
+  h1 small {
+    display: block;
+    font-size: 15px;
+    padding-top: 8px;
+    color: gray;
+  }
+  .avatar-upload {
+    position: relative;
+    max-width: 205px;
+    margin: 50px auto;
+  }
+  .avatar-upload .avatar-edit {
+    position: absolute;
+    right: 12px;
+    z-index: 1;
+    top: 10px;
+  }
+  .avatar-upload .avatar-edit input {
+    display: none;
+  }
+  .avatar-upload .avatar-edit input + label {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all 0.2s ease-in-out;
+  }
+  .avatar-upload .avatar-edit input + label:hover {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+  }
+  .avatar-upload .avatar-edit input + label:after {
+    content: "\f040";
+    font-family: 'FontAwesome';
+    color: #757575;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto;
+  }
+  .avatar-upload .avatar-preview {
+    width: 192px;
+    height: 192px;
+    position: relative;
+    border-radius: 100%;
+    border: 6px solid #d7eaf7;
+    box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 10%);
+  }
+  .box {
+    width: 20%;
+    padding-top: 10px;
+    height: 7%;
+    position: relative;
+    border: 6px solid #d7eaf7;
+    box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 10%);
+  }
+  .avatar-upload .avatar-preview > div {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  </style>
+  
+    <script>
+    window.console = window.console || function(t) {};
+  </script>
+  
+    
+    
+    <script>
+    if (document.location.search.match(/type=embed/gi)) {
+      window.parent.postMessage("resize", "*");
+    }
+  </script>
+  
+  
+  </head>
+  
+  <body translate="no">
+    <div class="container">
+        <span >
+            <h1 class="box">jQuery 
+                <small>Image preview</small>
+            </h1>
+        </span>
+      <div class="avatar-upload">
+          <div class="avatar-edit">
+            <form name="photo" id="imageUploadForm" enctype="multipart/form-data" action="/upload" method="post">
+
+              <input type="file" id="myImage" name="myImage" accept=".png, .jpg, .jpeg">
+              <label for="myImage"></label>
+            </form>
+          </div>
+          <div class="avatar-preview">
+              <div id="imagePreview" style="background-image: url(https://railsware.com/blog/wp-content/uploads/2018/09/360x360-rw-blog-node-js-180x180.png);">
+              </div>
+          </div>
+      </div>
+  </div>
+      <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script id="rendered-js">
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      
+      var formData = new FormData(document.getElementById("imageUploadForm"));
+      console.log('formData: ',formData);
+      $.ajax({
+            type:'POST',
+            url: '/upload',
+            data:formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                console.log("success");
+                console.log(data);
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
+      
+      reader.onload = function (e) {
+        $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+        $('#imagePreview').hide();
+        $('#imagePreview').fadeIn(650);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  $("#myImage").change(function () {
+    console.log('task')
+    readURL(this);
+  });
+      </script>
+  </body>
+  </html>
